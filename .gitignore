@@ -1,9 +1,18 @@
+## Generic OS meta files
+.directory
+.DS_Store
+
+## outputs
+.out
+*.zip
+
+
+## Python
 .env
 __pycache__
 .ipynb_checkpoints
 llama-index-cache/
 
-# database files
+## database files
 *.db*
 
-.directory

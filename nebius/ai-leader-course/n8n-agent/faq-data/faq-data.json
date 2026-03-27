@@ -1,0 +1,121 @@
+[
+ {
+  "id": "faq-001",
+  "question": "What is CandleKeep's return policy?",
+  "answer": "CandleKeep offers a 30-day return policy on all furniture items. Items must be unused, in original packaging, and with all tags attached. Mattresses and custom-made items are non-returnable for hygiene reasons. To initiate a return, go to your Order History, select the item, and click 'Request Return'. A prepaid shipping label will be emailed within 24 hours. Refunds are processed within 5-7 business days after we receive the item.",
+  "category": "returns"
+ },
+ {
+  "id": "faq-002",
+  "question": "How long does delivery take?",
+  "answer": "Standard delivery takes 5-10 business days for in-stock items. Express delivery (available for orders over £50) takes 2-3 business days. Large furniture items like sofas, beds, and dining tables require scheduled delivery and typically arrive within 2-3 weeks. You'll receive a tracking number via email once your order ships. Delivery is free on orders over £75.",
+  "category": "delivery"
+ },
+ {
+  "id": "faq-003",
+  "question": "Do you offer furniture assembly services?",
+  "answer": "Yes! CandleKeep offers professional assembly for £29 per item or £49 for up to 3 items. Assembly is included free with orders over £500. Our technicians will assemble your furniture in your home and remove all packaging. You can add assembly during checkout or request it after purchase by contacting support with your order number.",
+  "category": "delivery"
+ },
+ {
+  "id": "faq-004",
+  "question": "What payment methods do you accept?",
+  "answer": "We accept Visa, Mastercard, American Express, PayPal, Apple Pay, Google Pay, and Klarna. Klarna offers Pay in 3 (split into 3 interest-free payments) and Pay in 30 (pay nothing for 30 days). For orders over £1,000, we also offer 0% finance over 12 months (subject to credit approval).",
+  "category": "payment"
+ },
+ {
+  "id": "faq-005",
+  "question": "How do I track my order?",
+  "answer": "Once your order ships, you'll receive an email with a tracking link. You can also track your order by logging into your CandleKeep account, going to Order History, and clicking 'Track Order'. For large furniture deliveries, our delivery partner will contact you 24-48 hours before delivery to confirm a delivery window.",
+  "category": "delivery"
+ },
+ {
+  "id": "faq-006",
+  "question": "What is your warranty policy?",
+  "answer": "All CandleKeep furniture comes with a 2-year manufacturer warranty covering defects in materials and workmanship. Mattresses have a 10-year warranty. The warranty does not cover normal wear and tear, damage from misuse, or cosmetic damage. To make a warranty claim, email warranty@candlekeep.com with your order number and photos of the issue.",
+  "category": "warranty"
+ },
+ {
+  "id": "faq-007",
+  "question": "Can I change or cancel my order?",
+  "answer": "You can change or cancel your order within 2 hours of placing it by contacting our support team with your order number. After 2 hours, orders enter processing and changes may not be possible. For custom or made-to-order items, cancellation is not possible once production has started. You will receive an email confirmation when your order enters production.",
+  "category": "orders"
+ },
+ {
+  "id": "faq-008",
+  "question": "Do you deliver to my area?",
+  "answer": "CandleKeep delivers to all UK mainland addresses. Deliveries to Northern Ireland, Scottish Highlands, and offshore islands may incur additional shipping charges (shown at checkout). We currently do not ship internationally. Enter your postcode at checkout to see available delivery options and estimated costs.",
+  "category": "delivery"
+ },
+ {
+  "id": "faq-009",
+  "question": "How do I care for my wooden furniture?",
+  "answer": "For wooden furniture, dust regularly with a soft, dry cloth. Avoid placing items in direct sunlight to prevent fading. Use coasters under drinks and placemats under hot dishes. For spills, wipe immediately with a damp cloth and dry thoroughly. Apply furniture polish or wax every 3-6 months. Avoid harsh chemicals and abrasive cleaners.",
+  "category": "care"
+ },
+ {
+  "id": "faq-010",
+  "question": "What materials are your sofas made from?",
+  "answer": "Our sofas feature kiln-dried hardwood frames for durability. Cushions use high-density foam cores wrapped in polyester fiber. Upholstery options include 100% polyester fabric (easy clean, pet-friendly), velvet, linen-look, and genuine leather. All fabrics are OEKO-TEX certified and free from harmful substances. Fabric samples are available free on request.",
+  "category": "products"
+ },
+ {
+  "id": "faq-011",
+  "question": "Can I request fabric samples before ordering?",
+  "answer": "Yes! We offer free fabric samples for all our upholstered furniture. Visit the product page and click 'Order Free Samples'. Select up to 5 fabric swatches per order. Samples are dispatched within 1-2 business days and arrive via Royal Mail. Each sample is approximately 10x10cm.",
+  "category": "products"
+ },
+ {
+  "id": "faq-012",
+  "question": "What if my item arrives damaged?",
+  "answer": "If your item arrives damaged, please take photos of the damage and packaging immediately. Report the damage within 48 hours by emailing support@candlekeep.com or calling our helpline. Include your order number and photos. We'll arrange a free replacement or full refund. Do not discard the original packaging until your claim is resolved.",
+  "category": "returns"
+ },
+ {
+  "id": "faq-013",
+  "question": "Do you offer price matching?",
+  "answer": "Yes, CandleKeep offers price matching on identical items from major UK retailers (John Lewis, IKEA, Habitat, Made.com). The item must be in stock, available for UK delivery, and sold by the retailer (not marketplace sellers). Email pricematch@candlekeep.com with a link to the competitor's product page. Price matches are valid for 7 days after your purchase.",
+  "category": "pricing"
+ },
+ {
+  "id": "faq-014",
+  "question": "How do I clean fabric upholstery?",
+  "answer": "For general cleaning, vacuum your sofa weekly using a soft brush attachment. For spills, blot (don't rub) with a clean, damp cloth. Most of our fabrics are treated with stain-resistant coating. For deeper cleaning, use a fabric-safe upholstery cleaner and test on a hidden area first. Professional cleaning is recommended once a year for heavily used pieces.",
+  "category": "care"
+ },
+ {
+  "id": "faq-015",
+  "question": "Do you have a showroom I can visit?",
+  "answer": "CandleKeep has showrooms in London (Tottenham Court Road), Manchester (Trafford), and Edinburgh (Fort Kinnaird). Opening hours are Monday-Saturday 10am-7pm, Sunday 11am-5pm. No appointment needed, but you can book a free design consultation at candlekeep.com/showrooms. Showroom staff can help with measurements, fabric selection, and layout planning.",
+  "category": "general"
+ },
+ {
+  "id": "faq-016",
+  "question": "What is white glove delivery?",
+  "answer": "White glove delivery is our premium service (£79 or free over £1,000). It includes: delivery to a room of your choice (not just the front door), full assembly, placement where you want it, and removal of all packaging. The delivery team will also take away your old furniture if arranged in advance (additional £30 per item).",
+  "category": "delivery"
+ },
+ {
+  "id": "faq-017",
+  "question": "Are your products eco-friendly?",
+  "answer": "CandleKeep is committed to sustainability. Our wooden furniture uses FSC-certified timber from responsibly managed forests. Packaging is 100% recyclable. We offer a furniture recycling scheme where we collect old furniture when delivering new items. Our factories use solar energy and water-based finishes. Look for the 'Green Choice' badge on eco-friendly products.",
+  "category": "products"
+ },
+ {
+  "id": "faq-018",
+  "question": "Can I buy replacement parts or cushions?",
+  "answer": "Yes! Replacement cushions, legs, and hardware are available for most products. Visit candlekeep.com/spares or contact support with your product name/SKU and the part you need. For products within warranty, replacement parts are free. For out-of-warranty items, parts are available at cost price. Custom cushion covers can also be ordered.",
+  "category": "products"
+ },
+ {
+  "id": "faq-019",
+  "question": "How do I use a discount code?",
+  "answer": "Enter your discount code in the 'Promo Code' box at checkout and click 'Apply'. The discount will be shown in your order summary. Only one code can be used per order. Discount codes cannot be combined with sale items or finance offers unless stated. If your code isn't working, check the expiry date and minimum spend requirements.",
+  "category": "payment"
+ },
+ {
+  "id": "faq-020",
+  "question": "What are the dimensions I should check before buying furniture?",
+  "answer": "Before ordering, measure: 1) The space where the furniture will go (allow 5cm clearance on each side), 2) Doorways, hallways, and stairs the furniture needs to pass through, 3) Ceiling height for tall items like wardrobes. Product dimensions are listed on each product page. Use our AR app to visualize furniture in your space. Download from the App Store or Google Play."
+ }
+]

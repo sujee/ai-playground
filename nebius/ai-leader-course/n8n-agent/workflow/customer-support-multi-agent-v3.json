@@ -1,0 +1,780 @@
+{
+  "name": "Customer Support Multi-Agent v2 working (Google Sheets + FAQ)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "support-ticket-v2-gsheet",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "7a67ed15-f4ca-40da-a37f-62983e5dd4ff",
+      "name": "1. User Message",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2416,
+        304
+      ],
+      "webhookId": "support-ticket-v2-gsheet"
+    },
+    {
+      "parameters": {
+        "jsCode": "const query = $input.first().json.body?.query || '';\nconst orderMatch = query.match(/\\b(\\d{6})\\b/);\nconst providedOrderId = $input.first().json.body?.order_id || null;\n\n// Supports both n8n Cloud (Variables) and Docker (.env)\n// const pineconeHost = $vars?.PINECONE_HOST || $env.PINECONE_HOST;\nconst pineconeHost = 'support-faq-fx69yh6.svc.aped-4627-b74a.pinecone.io' // do not include HTTPS !\n\nreturn [{\n  json: {\n    original_query: query,\n    order_id: providedOrderId || (orderMatch ? orderMatch[1] : null),\n    customer_email: $input.first().json.body?.email || null,\n    submission_channel: $input.first().json.body?.channel || 'API',\n    timestamp: new Date().toISOString(),\n    ticket_id: 'TKT-' + Date.now(),\n    pinecone_host: pineconeHost\n  }\n}];"
+      },
+      "id": "d2907eb6-ece2-4605-b4f5-a60c59fa3a17",
+      "name": "2. Preprocessing",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2208,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-order",
+              "leftValue": "={{ $json.order_id !== null }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e7bec768-1db9-4364-9e86-91f1b6197ac1",
+      "name": "Has Order ID?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1984,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/embeddings",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'BAAI/bge-en-icl', input: $('2. Preprocessing').first().json.original_query }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "a037a35d-2652-4560-8d50-fe97ef8a3f55",
+      "name": "Embed Query",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1984,
+        544
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "zJf7toDiDt6wUlXE",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://' + $('2. Preprocessing').first().json.pinecone_host + '/query' }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "pineconeApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ vector: $json.data[0].embedding.slice(0, 768), topK: 1, includeMetadata: true, namespace: 'faq' }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "4140d2ed-37c6-46ed-8c6e-72d8b5e0b9c7",
+      "name": "FAQ Search (Pinecone)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1760,
+        544
+      ],
+      "credentials": {
+        "pineconeApi": {
+          "id": "vfsYyyDDuI3UHSbs",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "faq-match",
+              "leftValue": "={{ $json.matches && $json.matches.length > 0 && $json.matches[0].score >= 0.65 }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f06856a4-3878-4d86-80ec-286be93e495b",
+      "name": "FAQ Match?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1536,
+        544
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const preprocess = $('2. Preprocessing').first().json;\nconst matches = $input.first().json.matches || [];\nconst best = matches[0];\n\nreturn [{\n  json: {\n    ticket_id: preprocess.ticket_id,\n    order_id: null,\n    status: 'resolved',\n    source: 'faq',\n    original_query: preprocess.original_query,\n    sentiment: 'neutral',\n    category: best.metadata.category || 'FAQ',\n    department: 'Customer Support',\n    resolution: best.metadata.answer,\n    faq_question: best.metadata.question,\n    faq_score: best.score,\n    action_items: ['FAQ answer provided'],\n    confidence_level: 'high',\n    confidence_score: best.score,\n    resolved_at: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "b9fd670c-e12b-434f-b7ae-9ff780d5d089",
+      "name": "Format FAQ Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1328,
+        448
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "8cf83195-8a39-481a-9572-dbf851571fa8",
+      "name": "Respond FAQ",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -1104,
+        448
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1iOTVG_rTqOZifioRbLZOkYzYmTLRW9rz430f3qBloPQ",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 543702529,
+          "mode": "list",
+          "cachedResultName": "order-history",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1iOTVG_rTqOZifioRbLZOkYzYmTLRW9rz430f3qBloPQ/edit#gid=543702529"
+        },
+        "options": {}
+      },
+      "id": "de7a7cc6-a0e6-4a2e-9697-f81d2370cd45",
+      "name": "Read Google Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1760,
+        208
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ivgdKiYFcN7sswMR",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get preprocessing data directly from the Preprocessing node\nconst preprocess = $('2. Preprocessing').first().json;\n\n// Get all rows from Google Sheets\nconst sheetRows = $('Read Google Sheet').all();\n\n// Find matching order\nconst orderId = preprocess.order_id;\nlet orderRecord = null;\nlet orderHistory = null;\n\nif (orderId && sheetRows.length > 0) {\n  // Find the row where Order ID matches\n  for (const row of sheetRows) {\n    const rowOrderId = row.json['Order ID'];\n    if (rowOrderId && String(rowOrderId).trim() === String(orderId).trim()) {\n      orderRecord = row.json;\n      orderHistory = row.json['Order History'] || null;\n      break;\n    }\n  }\n}\n\nreturn [{\n  json: {\n    ...preprocess,\n    order_record: orderRecord,\n    order_history: orderHistory,\n    has_order_context: !!orderRecord\n  }\n}];"
+      },
+      "id": "25b23d1f-080e-4331-a336-fcc785f51a1f",
+      "name": "3. Lookup Order History",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1536,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  model: 'meta-llama/Llama-3.3-70B-Instruct',\n  temperature: 0.1,\n  max_tokens: 512,\n  messages: [\n    {\n      role: 'system',\n      content: 'You are a Coordinator Agent for CandleKeep, a furniture retailer.\\n\\nAnalyze customer messages and respond in JSON only:\\n{\\n  \"sentiment\": \"positive|neutral|negative\",\\n  \"category\": \"Order Issue|Delivery|Payment|Order Inquiry|General Feedback|Product Question|Technical Issue\",\\n  \"department\": \"Logistics|Customer Support|Returns|Product Team|Billing\",\\n  \"recognized\": true|false,\\n  \"confidence\": 0.0-1.0,\\n  \"summary\": \"brief summary\"\\n}\\n\\nIMPORTANT: Set recognized=false for:\\n- Legal or partnership inquiries\\n- Press or media requests\\n- Job applications\\n- Requests outside normal customer support scope\\n- Anything requiring human escalation\\n\\nOnly set recognized=true for standard customer support: orders, returns, deliveries, products, payments, technical issues, feedback.'\n    },\n    {\n      role: 'user',\n      content: 'Message: ' + $json.original_query + '\\nChannel: ' + $json.submission_channel + ($json.order_history ? '\\n\\nOrder History:\\n' + $json.order_history : '')\n    }\n  ]\n}) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "c1ba1146-4f93-4f99-a9ed-09f84718adcd",
+      "name": "4. Coordinator Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1328,
+        208
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "zJf7toDiDt6wUlXE",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first().json.choices[0].message.content;\nconst enriched = $('3. Lookup Order History').first().json;\n\nlet parsed;\ntry {\n  const match = raw.match(/\\{[\\s\\S]*\\}/);\n  parsed = JSON.parse(match ? match[0] : raw);\n} catch(e) {\n  parsed = { sentiment: 'neutral', category: 'General Feedback', department: 'Customer Support', recognized: false, confidence: 0.3, summary: raw };\n}\n\nreturn [{\n  json: {\n    ...enriched,\n    sentiment: parsed.sentiment || 'neutral',\n    category: parsed.category || 'General Feedback',\n    department: parsed.department || 'Customer Support',\n    recognized: parsed.recognized === true,\n    coordinator_confidence: parsed.confidence || 0.5,\n    summary: parsed.summary || ''\n  }\n}];"
+      },
+      "id": "b04d3e25-91eb-4c04-a4ef-140198bab4f7",
+      "name": "Parse Coordinator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1104,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond1",
+              "leftValue": "={{ $json.recognized }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a9d3a997-3e7d-48c6-811b-c849e05b8bde",
+      "name": "5. Recognized?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  model: 'meta-llama/Llama-3.3-70B-Instruct',\n  temperature: 0.1,\n  max_tokens: 2048,\n  messages: [\n    {\n      role: 'system',\n      content: 'You are a Resolution Agent for CandleKeep, a furniture retailer.\\n\\nIMPORTANT RULES:\\n1. ONLY use dates and facts from the Order History provided. NEVER make up dates or carrier names.\\n2. If order history is provided, quote the exact dates and details from it.\\n3. If no order history, say \"I don\\'t have your order details on file\" and ask for more info.\\n4. Be empathetic and reference the customer\\'s sentiment.\\n\\nConfidence scoring:\\n- high (0.8+): Order history available and question can be fully answered\\n- medium (0.5-0.79): Partial info available\\n- low (<0.5): No order history or cannot answer\\n\\nRespond in JSON only:\\n{\\n  \"response\": \"customer response with EXACT dates from history\",\\n  \"action_items\": [\"action1\"],\\n  \"confidence_level\": \"high|medium|low\",\\n  \"confidence_score\": 0.0-1.0,\\n  \"escalation_needed\": false,\\n  \"escalation_reason\": null\\n}'\n    },\n    {\n      role: 'user',\n      content: 'Ticket: ' + $json.ticket_id + '\\nOrder: ' + ($json.order_id || 'N/A') + '\\nCategory: ' + $json.category + '\\nSentiment: ' + $json.sentiment + '\\n\\nCustomer Message: ' + $json.original_query + ($json.order_history ? '\\n\\nOrder History (USE THESE EXACT DATES):\\n' + $json.order_history : '\\n\\nNo order history available.')\n    }\n  ]\n}) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "b47f46c6-d605-49ab-8d24-7c5abfef37d7",
+      "name": "6. Resolution Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -656,
+        112
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "zJf7toDiDt6wUlXE",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nreturn [{\n  json: {\n    ticket_id: data.ticket_id,\n    order_id: data.order_id,\n    status: 'manual_processing',\n    original_query: data.original_query,\n    sentiment: data.sentiment,\n    category: data.category,\n    department: data.department,\n    resolution: 'This request requires manual processing. Your ticket has been forwarded to our support team.',\n    action_items: ['Forwarded to manual queue', 'Human review within 24h'],\n    escalation_needed: true,\n    escalation_reason: 'Unrecognized request',\n    confidence_level: 'low',\n    resolved_at: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "d200af20-aafe-4120-a8a6-5c8bd32a6bd1",
+      "name": "Manual (Unrecognized)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -656,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first().json.choices[0].message.content;\nconst enriched = $('Parse Coordinator').first().json;\n\nlet parsed;\ntry {\n  const match = raw.match(/\\{[\\s\\S]*\\}/);\n  parsed = JSON.parse(match ? match[0] : raw);\n} catch(e) {\n  parsed = { response: raw, action_items: [], confidence_level: 'low', confidence_score: 0.3, escalation_needed: true, escalation_reason: 'Parse error' };\n}\n\nreturn [{\n  json: {\n    ticket_id: enriched.ticket_id,\n    order_id: enriched.order_id,\n    original_query: enriched.original_query,\n    sentiment: enriched.sentiment,\n    category: enriched.category,\n    department: enriched.department,\n    response: parsed.response || '',\n    action_items: parsed.action_items || [],\n    confidence_level: parsed.confidence_level || 'medium',\n    confidence_score: parsed.confidence_score || 0.5,\n    escalation_needed: parsed.escalation_needed || false,\n    escalation_reason: parsed.escalation_reason || null\n  }\n}];"
+      },
+      "id": "a6590202-2421-4ac6-83f2-261a118bb5c7",
+      "name": "Parse Resolution",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond2",
+              "leftValue": "={{ $json.confidence_level === 'high' || $json.confidence_level === 'medium' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "7657341b-db6b-4fc5-82c2-21462405b78f",
+      "name": "7. Confidence?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nreturn [{\n  json: {\n    ticket_id: data.ticket_id,\n    order_id: data.order_id,\n    status: 'resolved',\n    original_query: data.original_query,\n    sentiment: data.sentiment,\n    category: data.category,\n    department: data.department,\n    resolution: data.response,\n    action_items: data.action_items,\n    confidence_level: data.confidence_level,\n    confidence_score: data.confidence_score,\n    resolved_at: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "511dfc8d-e6b2-4d40-a8df-19a19badd983",
+      "name": "8a. Auto Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nreturn [{\n  json: {\n    ticket_id: data.ticket_id,\n    order_id: data.order_id,\n    status: 'manual_processing',\n    original_query: data.original_query,\n    sentiment: data.sentiment,\n    category: data.category,\n    department: data.department,\n    initial_response: data.response,\n    resolution: 'Thank you for contacting CandleKeep. A team member will follow up shortly.',\n    action_items: ['Escalated to human agent', 'Low confidence review'],\n    escalation_needed: true,\n    escalation_reason: data.escalation_reason || 'Low confidence',\n    confidence_level: data.confidence_level,\n    resolved_at: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "565a14dd-2e25-4ebe-b966-38550412adf4",
+      "name": "8b. Manual (Low Conf)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "1a1492e7-2510-4da2-b64b-c2bf81642f90",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "9d8aeb45-ffe4-442c-ac80-4a4af2138005",
+      "name": "Respond Manual",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "1d092640-daba-44e7-8048-6a6f2aa384ed",
+      "name": "Respond Unrecognized",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -448,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## CandleKeep Multi-Agent v2 (Google Sheets + FAQ)\n\n**Flow:**\n1. Webhook → Preprocessing\n2. **Has Order ID?**\n   - YES → Google Sheet → Order flow\n   - NO → FAQ Search (Pinecone)\n3. **FAQ Match?**\n   - YES → Return FAQ answer\n   - NO → Order flow (manual handling)\n4. **Order Flow:** Coordinator → Resolution\n5. Confidence-based routing\n\n**Data:** Google Sheet + Pinecone FAQ\n**LLM:** Nebius Token Factory",
+        "height": 360,
+        "width": 340,
+        "color": 5
+      },
+      "id": "bd396878-d597-4d84-819e-d837bb2f4ccc",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2704,
+        128
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "1. User Message": {
+      "main": [
+        [
+          {
+            "node": "2. Preprocessing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Preprocessing": {
+      "main": [
+        [
+          {
+            "node": "Has Order ID?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Order ID?": {
+      "main": [
+        [
+          {
+            "node": "Read Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Embed Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embed Query": {
+      "main": [
+        [
+          {
+            "node": "FAQ Search (Pinecone)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FAQ Search (Pinecone)": {
+      "main": [
+        [
+          {
+            "node": "FAQ Match?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FAQ Match?": {
+      "main": [
+        [
+          {
+            "node": "Format FAQ Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Read Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format FAQ Response": {
+      "main": [
+        [
+          {
+            "node": "Respond FAQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Google Sheet": {
+      "main": [
+        [
+          {
+            "node": "3. Lookup Order History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Lookup Order History": {
+      "main": [
+        [
+          {
+            "node": "4. Coordinator Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. Coordinator Agent": {
+      "main": [
+        [
+          {
+            "node": "Parse Coordinator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Coordinator": {
+      "main": [
+        [
+          {
+            "node": "5. Recognized?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. Recognized?": {
+      "main": [
+        [
+          {
+            "node": "6. Resolution Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Manual (Unrecognized)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6. Resolution Agent": {
+      "main": [
+        [
+          {
+            "node": "Parse Resolution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual (Unrecognized)": {
+      "main": [
+        [
+          {
+            "node": "Respond Unrecognized",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Resolution": {
+      "main": [
+        [
+          {
+            "node": "7. Confidence?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7. Confidence?": {
+      "main": [
+        [
+          {
+            "node": "8a. Auto Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "8b. Manual (Low Conf)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8a. Auto Response": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8b. Manual (Low Conf)": {
+      "main": [
+        [
+          {
+            "node": "Respond Manual",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "8421e812-420d-4992-8728-42de7b47235e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9bf9bcfd0f29c8254c841be7cb0f393eebe6b56b8daa775d7fd5204fd3442eaa"
+  },
+  "id": "DQ0R7nEE7AjflJtM",
+  "tags": [
+    {
+      "updatedAt": "2026-02-15T18:57:41.086Z",
+      "createdAt": "2026-02-15T18:57:41.086Z",
+      "id": "54fE81FDKndbAHOB",
+      "name": "customer-support"
+    },
+    {
+      "updatedAt": "2026-03-02T19:35:08.144Z",
+      "createdAt": "2026-03-02T19:35:08.144Z",
+      "id": "Cawgsem52y64AG5i",
+      "name": "faq"
+    },
+    {
+      "updatedAt": "2026-02-23T19:22:10.447Z",
+      "createdAt": "2026-02-23T19:22:10.447Z",
+      "id": "Me7UpeQf4WyhT8QH",
+      "name": "multi-agent"
+    },
+    {
+      "updatedAt": "2026-02-23T19:22:10.498Z",
+      "createdAt": "2026-02-23T19:22:10.498Z",
+      "id": "dP6ZOMxNGYyqaGzg",
+      "name": "candlekeep"
+    },
+    {
+      "updatedAt": "2026-03-02T19:35:08.183Z",
+      "createdAt": "2026-03-02T19:35:08.183Z",
+      "id": "raUmpojyOuIsNNmS",
+      "name": "pinecone"
+    },
+    {
+      "updatedAt": "2026-02-23T19:22:10.474Z",
+      "createdAt": "2026-02-23T19:22:10.474Z",
+      "id": "xT8NcRuPe86ii6Rp",
+      "name": "google-sheets"
+    }
+  ]
+}
