@@ -12,24 +12,18 @@
       "name": "1. User Message",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [
-        -2416,
-        304
-      ],
+      "position": [-2416, 304],
       "webhookId": "support-ticket-v2-gsheet"
     },
     {
       "parameters": {
-        "jsCode": "const query = $input.first().json.body?.query || '';\nconst orderMatch = query.match(/\\b(\\d{6})\\b/);\nconst providedOrderId = $input.first().json.body?.order_id || null;\n\n// Supports both n8n Cloud (Variables) and Docker (.env)\n// const pineconeHost = $vars?.PINECONE_HOST || $env.PINECONE_HOST;\nconst pineconeHost = 'support-faq-fx69yh6.svc.aped-4627-b74a.pinecone.io' // do not include HTTPS !\n\nreturn [{\n  json: {\n    original_query: query,\n    order_id: providedOrderId || (orderMatch ? orderMatch[1] : null),\n    customer_email: $input.first().json.body?.email || null,\n    submission_channel: $input.first().json.body?.channel || 'API',\n    timestamp: new Date().toISOString(),\n    ticket_id: 'TKT-' + Date.now(),\n    pinecone_host: pineconeHost\n  }\n}];"
+        "jsCode": "const query = $input.first().json.body?.query || '';\nconst orderMatch = query.match(/\\b(\\d{6})\\b/);\nconst providedOrderId = $input.first().json.body?.order_id || null;\n\n// Supports both n8n Cloud (Variables) and Docker (.env)\n// const pineconeHost = $vars?.PINECONE_HOST || $env.PINECONE_HOST;\nconst pineconeHost = 'PINECONE HOST' // do not include HTTPS !\n\nreturn [{\n  json: {\n    original_query: query,\n    order_id: providedOrderId || (orderMatch ? orderMatch[1] : null),\n    customer_email: $input.first().json.body?.email || null,\n    submission_channel: $input.first().json.body?.channel || 'API',\n    timestamp: new Date().toISOString(),\n    ticket_id: 'TKT-' + Date.now(),\n    pinecone_host: pineconeHost\n  }\n}];"
       },
       "id": "d2907eb6-ece2-4605-b4f5-a60c59fa3a17",
       "name": "2. Preprocessing",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -2208,
-        304
-      ]
+      "position": [-2208, 304]
     },
     {
       "parameters": {
@@ -58,10 +52,7 @@
       "name": "Has Order ID?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [
-        -1984,
-        304
-      ]
+      "position": [-1984, 304]
     },
     {
       "parameters": {
@@ -89,10 +80,7 @@
       "name": "Embed Query",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        -1984,
-        544
-      ],
+      "position": [-1984, 544],
       "credentials": {
         "openAiApi": {
           "id": "zJf7toDiDt6wUlXE",
@@ -126,10 +114,7 @@
       "name": "FAQ Search (Pinecone)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        -1760,
-        544
-      ],
+      "position": [-1760, 544],
       "credentials": {
         "pineconeApi": {
           "id": "vfsYyyDDuI3UHSbs",
@@ -164,10 +149,7 @@
       "name": "FAQ Match?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [
-        -1536,
-        544
-      ]
+      "position": [-1536, 544]
     },
     {
       "parameters": {
@@ -177,10 +159,7 @@
       "name": "Format FAQ Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -1328,
-        448
-      ]
+      "position": [-1328, 448]
     },
     {
       "parameters": {
@@ -190,10 +169,7 @@
       "name": "Respond FAQ",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [
-        -1104,
-        448
-      ]
+      "position": [-1104, 448]
     },
     {
       "parameters": {
@@ -215,10 +191,7 @@
       "name": "Read Google Sheet",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [
-        -1760,
-        208
-      ],
+      "position": [-1760, 208],
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "ivgdKiYFcN7sswMR",
@@ -234,10 +207,7 @@
       "name": "3. Lookup Order History",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -1536,
-        208
-      ]
+      "position": [-1536, 208]
     },
     {
       "parameters": {
@@ -265,10 +235,7 @@
       "name": "4. Coordinator Agent",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        -1328,
-        208
-      ],
+      "position": [-1328, 208],
       "credentials": {
         "openAiApi": {
           "id": "zJf7toDiDt6wUlXE",
@@ -284,10 +251,7 @@
       "name": "Parse Coordinator",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -1104,
-        208
-      ]
+      "position": [-1104, 208]
     },
     {
       "parameters": {
@@ -316,10 +280,7 @@
       "name": "5. Recognized?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [
-        -880,
-        208
-      ]
+      "position": [-880, 208]
     },
     {
       "parameters": {
@@ -347,10 +308,7 @@
       "name": "6. Resolution Agent",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        -656,
-        112
-      ],
+      "position": [-656, 112],
       "credentials": {
         "openAiApi": {
           "id": "zJf7toDiDt6wUlXE",
@@ -366,10 +324,7 @@
       "name": "Manual (Unrecognized)",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -656,
-        304
-      ]
+      "position": [-656, 304]
     },
     {
       "parameters": {
@@ -379,10 +334,7 @@
       "name": "Parse Resolution",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        -448,
-        112
-      ]
+      "position": [-448, 112]
     },
     {
       "parameters": {
@@ -411,10 +363,7 @@
       "name": "7. Confidence?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [
-        -224,
-        112
-      ]
+      "position": [-224, 112]
     },
     {
       "parameters": {
@@ -424,10 +373,7 @@
       "name": "8a. Auto Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        0,
-        0
-      ]
+      "position": [0, 0]
     },
     {
       "parameters": {
@@ -437,10 +383,7 @@
       "name": "8b. Manual (Low Conf)",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        0,
-        208
-      ]
+      "position": [0, 208]
     },
     {
       "parameters": {
@@ -450,10 +393,7 @@
       "name": "Respond Success",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [
-        224,
-        0
-      ]
+      "position": [224, 0]
     },
     {
       "parameters": {
@@ -463,10 +403,7 @@
       "name": "Respond Manual",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [
-        224,
-        208
-      ]
+      "position": [224, 208]
     },
     {
       "parameters": {
@@ -476,10 +413,7 @@
       "name": "Respond Unrecognized",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [
-        -448,
-        304
-      ]
+      "position": [-448, 304]
     },
     {
       "parameters": {
@@ -492,10 +426,7 @@
       "name": "Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [
-        -2704,
-        128
-      ]
+      "position": [-2704, 128]
     }
   ],
   "pinData": {},
