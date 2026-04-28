@@ -1,0 +1,157 @@
+{
+  "name": "Workshop - Department Classifier (Starter)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "customer-support1-starter",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "b48389bd-5b4b-4642-b2f4-e56235e0f640",
+      "name": "Customer Query Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "workshop-department-classifier"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ (() => { const raw = ($json.choices && $json.choices[0] && $json.choices[0].message && $json.choices[0].message.content) ? $json.choices[0].message.content : ''; let parsed = {}; try { const m = raw.match(/\\{[\\s\\S]*\\}/); parsed = JSON.parse(m ? m[0] : raw); } catch (e) {} const q = (($('Customer Query Webhook').first().json.body && ($('Customer Query Webhook').first().json.body.query || $('Customer Query Webhook').first().json.body.message)) || ''); const dep = ((parsed.department || 'other') + '').toLowerCase(); const allowed = ['support', 'sales', 'billing', 'other']; return JSON.stringify({ query: q, department: allowed.includes(dep) ? dep : 'other' }); })() }}",
+        "options": {}
+      },
+      "id": "0b18661c-32d5-4eba-b0bb-e7cc4d30a4e1",
+      "name": "Format Result JSON",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        544,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "09d457c7-39ff-4b81-97f2-4b662fdaedf3",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        784,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'Qwen/Qwen3-30B-A3B-Instruct-2507', temperature: 0, max_tokens: 120, response_format: { type: 'json_object' }, messages: [ { role: 'system', content: 'Classify the customer query into exactly one department: support, sales, billing, other. Return ONLY valid JSON in this format: {\\\"department\\\":\\\"support|sales|billing|other\\\"}.' }, { role: 'user', content: (($('Customer Query Webhook').first().json.body && ($('Customer Query Webhook').first().json.body.query || $('Customer Query Webhook').first().json.body.message)) || '') } ] }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "3dcb80fd-c0ba-4790-8235-d082cdd252a2",
+      "name": "Classify Department Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        288,
+        0
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "zJf7toDiDt6wUlXE",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Customer Query Webhook": {
+      "main": [
+        [
+          {
+            "node": "Classify Department Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Result JSON": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Department Agent": {
+      "main": [
+        [
+          {
+            "node": "Format Result JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f3d8f250-10b1-4451-95d6-8ce825081542",
+  "meta": {
+    "instanceId": "9bf9bcfd0f29c8254c841be7cb0f393eebe6b56b8daa775d7fd5204fd3442eaa"
+  },
+  "id": "lKpkNJgyMN07ES7I",
+  "tags": [
+    {
+      "updatedAt": "2026-02-15T18:57:41.128Z",
+      "createdAt": "2026-02-15T18:57:41.128Z",
+      "id": "M5KztBeAZltv8tc0",
+      "name": "nebius"
+    },
+    {
+      "updatedAt": "2026-04-22T19:16:59.235Z",
+      "createdAt": "2026-04-22T19:16:59.235Z",
+      "id": "OY0F9eEalXFEn7QH",
+      "name": "starter"
+    },
+    {
+      "updatedAt": "2026-04-22T19:16:59.180Z",
+      "createdAt": "2026-04-22T19:16:59.180Z",
+      "id": "euoqwFVqMnhoQJoa",
+      "name": "workshop"
+    }
+  ]
+}
