@@ -11,6 +11,7 @@
   - [Step 7: Let's send a request](#step-7-lets-send-a-request)
     - [Billing](#billing)
     - [Tech Support](#tech-support)
+    - [Try a different query](#try-a-different-query)
 
 
 ## Prerequisites
@@ -75,8 +76,7 @@ export AGENT_URL='your production url here'
 ```bash
 curl -s -X POST "$AGENT_URL" \
   -H "Content-Type: application/json" \
-  -d '{ "query": "I was charged twice this month" }' \
-  | jq '.'
+  -d '{ "query": "I was charged twice this month" }' 
 ```
 
 Response should be
@@ -93,8 +93,7 @@ Response should be
 ```bash
 curl -s -X POST "$AGENT_URL" \
   -H "Content-Type: application/json" \
-  -d '{  "query": "I need to reset my account password" }' \
-  | jq '.'
+  -d '{  "query": "I need to reset my account password" }' 
 ```
 
 Response should be
@@ -104,5 +103,15 @@ Response should be
   "query": "I need to reset my account password",
   "department": "support"
 }
+```
+
+### Try a different query
+
+Experiment with different queries.
+
+```bash
+curl -s -X POST "$AGENT_URL" \
+  -H "Content-Type: application/json" \
+  -d '{  "query": "I need to talk to a sales person" }' 
 ```
 
