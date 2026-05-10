@@ -5,10 +5,11 @@
   - [Step 1: Get Nebius Token Factory details](#step-1-get-nebius-token-factory-details)
   - [Step 2: Login to N8N](#step-2-login-to-n8n)
   - [Step 3: Add Nebius Token Factory to N8N](#step-3-add-nebius-token-factory-to-n8n)
-  - [Step 4: Import the workflow into N8N](#step-4-import-the-workflow-into-n8n)
-  - [Step 5: Publish the n8n workflow](#step-5-publish-the-n8n-workflow)
-  - [Step 6: Test the workflow](#step-6-test-the-workflow)
-  - [Step 7: Let's send a request](#step-7-lets-send-a-request)
+  - [(Optional) Step 4: Define the workflow from scratch](#optional-step-4-define-the-workflow-from-scratch)
+  - [Step 5: Import the workflow into N8N](#step-5-import-the-workflow-into-n8n)
+  - [Step 6: Publish the n8n workflow](#step-6-publish-the-n8n-workflow)
+  - [Step 7: Test the workflow](#step-7-test-the-workflow)
+  - [Step 8: Let's send a request](#step-8-lets-send-a-request)
     - [Billing](#billing)
     - [Tech Support](#tech-support)
     - [Try a different query](#try-a-different-query)
@@ -43,16 +44,25 @@ Sign up / login to your [n8n](https://n8n.io/) account.
 - Base URL: `https://api.tokenfactory.nebius.com/v1`
 - API Key: Your Nebius API key
 
-## Step 4: Import the workflow into N8N
+
+## (Optional) Step 4: Define the workflow from scratch
+
+This step is optional - we show you how to create the N8N workflow from scratch.  
+Follow [workflow](workflow.md)
+
+You can also import the workflow from the file below.
+
+
+## Step 5: Import the workflow into N8N
 
 - In [n8n](https://n8n.io/) , go to **Workflows -->  create a new workflow**
 - Click on **...** and choose import from file
 - Select this file [customer-support-starter-agent.json](customer-support-starter-agent.json)
 
 
-## Step 5: Publish the n8n workflow
+## Step 6: Publish the n8n workflow
 
-## Step 6: Test the workflow
+## Step 7: Test the workflow
 
 Let's go to testing it!
 
@@ -69,7 +79,7 @@ export AGENT_URL='your production url here'
 # export AGENT_URL='https://your_path.app.n8n.cloud/webhook/customer-support1-starter'
 ```
 
-## Step 7: Let's send a request
+## Step 8: Let's send a request
 
 ### Billing
 
