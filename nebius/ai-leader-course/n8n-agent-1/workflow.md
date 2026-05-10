@@ -1,14 +1,15 @@
-# Workflow
+# Building the Workflow
 
-## Step-1: Webhook Node
+## Step-1: Add Webhook Node
 
+- Change name to : `Customer Query Webhook`
 - HTTP method: POST
-- Path: customer-support-1-query
+- Path: `customer-support-1-query`
 
 Test it:
 - Click "Listen for test event'
 - Note the test URL : e.g `https://YOUR-APP.app.n8n.cloud/webhook-test/customer-support-1-query`
-- In the terminal 
+- In the terminal run this curl command:
 
 ```bash
 curl -X POST URL_above \
@@ -22,7 +23,7 @@ And you will get a response like
 {"message":"Workflow was started"}
 ```
 
-## Step-2: HTTP-Request Node
+## Step-2: Add HTTP-Request Node
 
 Add an HTTP Request node with these settings
 
@@ -38,7 +39,7 @@ Add an HTTP Request node with these settings
   - And the JSON is like this
 
 
-```
+```yaml
 {{ JSON.stringify(
     { 
         model: 'Qwen/Qwen3-30B-A3B-Instruct-2507', 
@@ -73,7 +74,7 @@ Once you add the webhook, open the webhook (first node, step 1), and change the 
 - Send some data to the webhook.  Use the **test** URL
 
 ```bash
-curl -X POST  'https://sujeework.app.n8n.cloud/webhook-test/customer-support-1-query' \
+curl -X POST  'YOUR_URL ' \
   -H "Content-Type: application/json" \
   -d '{ "query": "I need to reset my password"}'
 ```
@@ -91,6 +92,15 @@ You will response like this
 
 There we go!  We see the department.
 
+To see the pretty JSON output we can use `jq` like this
+
+```bash
+curl -X POST  'URL' \
+  -H "Content-Type: application/json" \
+  -d '{ "query": "I need to reset my password"}' \
+  | jq '.'
+```
+
 
 ## Step-5: Production Testing.
 
@@ -103,3 +113,16 @@ curl -X POST  'https://sujeework.app.n8n.cloud/webhook/customer-support-1-query'
   -H "Content-Type: application/json" \
   -d '{ "query": "I need to reset my password"}'
 ```
+
+department should be **support**
+
+Let's try a different one
+
+```bash
+curl -X POST  'https://sujeework.app.n8n.cloud/webhook/customer-support-1-query' \
+  -H "Content-Type: application/json" \
+  -d '{ "query": "I was charged twice last month"}'
+```
+
+department should be **billing**
+

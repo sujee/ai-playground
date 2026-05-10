@@ -68,16 +68,8 @@ Let's go to testing it!
 
 - Open 'web hook' node
 - select **production**
-- Note the URL
+- Note the URL (e.g `https://your_path.app.n8n.cloud/webhook/customer-support1-starter`)
 
-ON your terminal set this 
-
-```bash
-export AGENT_URL='your production url here'
-
-# eg. : 
-# export AGENT_URL='https://your_path.app.n8n.cloud/webhook/customer-support1-starter'
-```
 
 ## Step 8: Let's send a request
 
