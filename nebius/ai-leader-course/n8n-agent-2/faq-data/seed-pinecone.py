@@ -48,7 +48,7 @@ except ImportError:
 PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
 NEBIUS_API_KEY = os.environ.get("NEBIUS_API_KEY")
 NEBIUS_BASE_URL = "https://api.tokenfactory.nebius.com/v1/"
-EMBEDDING_MODEL = "BAAI/bge-en-icl"
+EMBEDDING_MODEL = "Qwen/Qwen3-Embedding-8B"
 PINECONE_INDEX = "support-faq"
 EMBEDDING_DIMENSION = 768  # Truncated from 4096 (Matryoshka) — better semantic precision
 
