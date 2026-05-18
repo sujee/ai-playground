@@ -64,7 +64,7 @@ Sign up / login to your [n8n](https://n8n.io/) account.
 - Click on **...** and choose import from file
 - Select this file [workflow/customer-support-multi-agent-v3.json](workflow/customer-support-multi-agent-v3.json)
 
-TODO: Add screenshot
+![](images/workflow.png)
 
 ## Step 7: Set Pinecone host
 
