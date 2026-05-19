@@ -17,17 +17,12 @@ NEBIUS_API_Key = your api key goes here
 
 ## Setup Python env
 
-### Option 1 - (Recommended) Using `uv`
+We are using `uv` package manager.
 
 ```bash
-uv venv --seed --python 3.12
-source .venv/bin/activate
-uv pip  install pinecone openai python-dotenv
+cd  faq-data
+uv sync
 ```
-
-### Option 2 - Using plain python
-
-TODO
 
 ## Import the data into Pinecone
 

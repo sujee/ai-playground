@@ -1,16 +1,10 @@
 # Testing n8n agent
 
-## Step 1: note the producion web hook url
+## Step 1: note the production web hook url
 
 - Open 'web hook' node
 - select **production**
-- Note the URL
-
-ON your terminal set this 
-
-```bash
-export BASE_URL='your production url here'
-```
+- Note the URL ; substitute this url for `AGENT_URL` in commands below.
 
 ## API Request Format
 
@@ -27,7 +21,18 @@ export BASE_URL='your production url here'
 ## Step 2: Test FAQ branch
 
 ```bash
-curl -s -X POST "$BASE_URL" \
+curl -s -X POST "$AGENT_URL" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "How long does delivery take?",
+    "channel": "Mobile App"
+  }' 
+```
+
+Optionally, you can use `jq` command for a pretty view of JSON response.
+
+```bash
+curl -s -X POST "$AGENT_URL" \
   -H "Content-Type: application/json" \
   -d '{
     "query": "How long does delivery take?",
@@ -38,7 +43,19 @@ curl -s -X POST "$BASE_URL" \
 ## Step 3:  agent confident response
 
 ```bash
-curl -s -X POST "$BASE_URL" \
+curl -s -X POST "$AGENT_URL" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "Where is my order? I placed it almost two weeks ago and the tracking link still shows processing. Can someone check the status for me urgently?",
+    "order_id": "770487",
+    "channel": "External Marketplace"
+  }' 
+```
+
+Optional, use of `jq` for pretty JSON view:
+
+```bash
+curl -s -X POST "$AGENT_URL" \
   -H "Content-Type: application/json" \
   -d '{
     "query": "Where is my order? I placed it almost two weeks ago and the tracking link still shows processing. Can someone check the status for me urgently?",
@@ -50,7 +67,7 @@ curl -s -X POST "$BASE_URL" \
 ## Step 4: manual response
 
 ```bash
-curl -s -X POST "$BASE_URL" \
+curl -s -X POST "$AGENT_URL" \
   -H "Content-Type: application/json" \
   -d '{
     "query": "I would like to discuss a potential partnership with your company. Please connect me with your legal and business development team.",

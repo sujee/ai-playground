@@ -38,7 +38,7 @@ See [architecture](architecture.md)
 | Component                | Detail                                     | Free tier? |
 | ------------------------ | ------------------------------------------ | ---------- |
 | **n8n**                  | Workflow engine — n8n Cloud or self-hosted | ✅         |
-| **Nebius Token Factory** | LLM `Llama-3.3-70B-Instruct` + embeddings  | ✅         |
+| **Nebius Token Factory** | LLMs + embedding models  | ✅         |
 | **Pinecone**             | Vector database for FAQ search             | ✅         |
 | **Google Sheets**        | Cloud-hosted order data                    | ✅         |
 

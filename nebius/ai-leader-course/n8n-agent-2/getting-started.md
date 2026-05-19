@@ -75,8 +75,6 @@ Sign up / login to your [n8n](https://n8n.io/) account.
 const pineconeHost = 'support-faq-xxxxx.pinecone.io' // do not include HTTPS !
 ```
 
-TODO: Add screenshot
-
 
 ## Step 8: Create a copy of Google Sheets on your Google account
 
