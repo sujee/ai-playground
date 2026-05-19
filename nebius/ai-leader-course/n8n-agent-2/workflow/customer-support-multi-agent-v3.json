@@ -12,18 +12,24 @@
       "name": "1. User Message",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [-2416, 304],
+      "position": [
+        -2416,
+        304
+      ],
       "webhookId": "support-ticket-v2-gsheet"
     },
     {
       "parameters": {
-        "jsCode": "const query = $input.first().json.body?.query || '';\nconst orderMatch = query.match(/\\b(\\d{6})\\b/);\nconst providedOrderId = $input.first().json.body?.order_id || null;\n\n// Supports both n8n Cloud (Variables) and Docker (.env)\n// const pineconeHost = $vars?.PINECONE_HOST || $env.PINECONE_HOST;\nconst pineconeHost = 'PINECONE HOST' // do not include HTTPS !\n\nreturn [{\n  json: {\n    original_query: query,\n    order_id: providedOrderId || (orderMatch ? orderMatch[1] : null),\n    customer_email: $input.first().json.body?.email || null,\n    submission_channel: $input.first().json.body?.channel || 'API',\n    timestamp: new Date().toISOString(),\n    ticket_id: 'TKT-' + Date.now(),\n    pinecone_host: pineconeHost\n  }\n}];"
+        "jsCode": "const query = $input.first().json.body?.query || '';\nconst orderMatch = query.match(/\\b(\\d{6})\\b/);\nconst providedOrderId = $input.first().json.body?.order_id || null;\n\n// Supports both n8n Cloud (Variables) and Docker (.env)\n// const pineconeHost = $vars?.PINECONE_HOST || $env.PINECONE_HOST;\nconst pineconeHost = 'support-faq-fx69yh6.svc.aped-4627-b74a.pinecone.io' // do not include HTTPS !\n\nreturn [{\n  json: {\n    original_query: query,\n    order_id: providedOrderId || (orderMatch ? orderMatch[1] : null),\n    customer_email: $input.first().json.body?.email || null,\n    submission_channel: $input.first().json.body?.channel || 'API',\n    timestamp: new Date().toISOString(),\n    ticket_id: 'TKT-' + Date.now(),\n    pinecone_host: pineconeHost\n  }\n}];"
       },
       "id": "d2907eb6-ece2-4605-b4f5-a60c59fa3a17",
       "name": "2. Preprocessing",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-2208, 304]
+      "position": [
+        -2208,
+        304
+      ]
     },
     {
       "parameters": {
@@ -31,7 +37,8 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict"
+            "typeValidation": "strict",
+            "version": 1
           },
           "conditions": [
             {
@@ -52,7 +59,10 @@
       "name": "Has Order ID?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [-1984, 304]
+      "position": [
+        -1984,
+        304
+      ]
     },
     {
       "parameters": {
@@ -71,7 +81,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ model: 'BAAI/bge-en-icl', input: $('2. Preprocessing').first().json.original_query }) }}",
+        "jsonBody": "={{ JSON.stringify({ model: 'Qwen/Qwen3-Embedding-8B', input: $('2. Preprocessing').first().json.original_query }) }}",
         "options": {
           "timeout": 30000
         }
@@ -80,7 +90,10 @@
       "name": "Embed Query",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [-1984, 544],
+      "position": [
+        -1984,
+        544
+      ],
       "credentials": {
         "openAiApi": {
           "id": "zJf7toDiDt6wUlXE",
@@ -114,7 +127,10 @@
       "name": "FAQ Search (Pinecone)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [-1760, 544],
+      "position": [
+        -1760,
+        544
+      ],
       "credentials": {
         "pineconeApi": {
           "id": "vfsYyyDDuI3UHSbs",
@@ -128,7 +144,8 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict"
+            "typeValidation": "strict",
+            "version": 1
           },
           "conditions": [
             {
@@ -149,7 +166,10 @@
       "name": "FAQ Match?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [-1536, 544]
+      "position": [
+        -1536,
+        544
+      ]
     },
     {
       "parameters": {
@@ -159,7 +179,10 @@
       "name": "Format FAQ Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-1328, 448]
+      "position": [
+        -1328,
+        448
+      ]
     },
     {
       "parameters": {
@@ -169,7 +192,10 @@
       "name": "Respond FAQ",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [-1104, 448]
+      "position": [
+        -1104,
+        448
+      ]
     },
     {
       "parameters": {
@@ -191,7 +217,10 @@
       "name": "Read Google Sheet",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [-1760, 208],
+      "position": [
+        -1760,
+        208
+      ],
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "ivgdKiYFcN7sswMR",
@@ -207,7 +236,10 @@
       "name": "3. Lookup Order History",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-1536, 208]
+      "position": [
+        -1536,
+        208
+      ]
     },
     {
       "parameters": {
@@ -226,7 +258,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({\n  model: 'meta-llama/Llama-3.3-70B-Instruct',\n  temperature: 0.1,\n  max_tokens: 512,\n  messages: [\n    {\n      role: 'system',\n      content: 'You are a Coordinator Agent for CandleKeep, a furniture retailer.\\n\\nAnalyze customer messages and respond in JSON only:\\n{\\n  \"sentiment\": \"positive|neutral|negative\",\\n  \"category\": \"Order Issue|Delivery|Payment|Order Inquiry|General Feedback|Product Question|Technical Issue\",\\n  \"department\": \"Logistics|Customer Support|Returns|Product Team|Billing\",\\n  \"recognized\": true|false,\\n  \"confidence\": 0.0-1.0,\\n  \"summary\": \"brief summary\"\\n}\\n\\nIMPORTANT: Set recognized=false for:\\n- Legal or partnership inquiries\\n- Press or media requests\\n- Job applications\\n- Requests outside normal customer support scope\\n- Anything requiring human escalation\\n\\nOnly set recognized=true for standard customer support: orders, returns, deliveries, products, payments, technical issues, feedback.'\n    },\n    {\n      role: 'user',\n      content: 'Message: ' + $json.original_query + '\\nChannel: ' + $json.submission_channel + ($json.order_history ? '\\n\\nOrder History:\\n' + $json.order_history : '')\n    }\n  ]\n}) }}",
+        "jsonBody": "={{ JSON.stringify({\n  model: 'Qwen/Qwen3-30B-A3B-Instruct-2507',\n  temperature: 0.1,\n  max_tokens: 512,\n  messages: [\n    {\n      role: 'system',\n      content: 'You are a Coordinator Agent for CandleKeep, a furniture retailer.\\n\\nAnalyze customer messages and respond in JSON only:\\n{\\n  \"sentiment\": \"positive|neutral|negative\",\\n  \"category\": \"Order Issue|Delivery|Payment|Order Inquiry|General Feedback|Product Question|Technical Issue\",\\n  \"department\": \"Logistics|Customer Support|Returns|Product Team|Billing\",\\n  \"recognized\": true|false,\\n  \"confidence\": 0.0-1.0,\\n  \"summary\": \"brief summary\"\\n}\\n\\nIMPORTANT: Set recognized=false for:\\n- Legal or partnership inquiries\\n- Press or media requests\\n- Job applications\\n- Requests outside normal customer support scope\\n- Anything requiring human escalation\\n\\nOnly set recognized=true for standard customer support: orders, returns, deliveries, products, payments, technical issues, feedback.'\n    },\n    {\n      role: 'user',\n      content: 'Message: ' + $json.original_query + '\\nChannel: ' + $json.submission_channel + ($json.order_history ? '\\n\\nOrder History:\\n' + $json.order_history : '')\n    }\n  ]\n}) }}",
         "options": {
           "timeout": 30000
         }
@@ -235,7 +267,10 @@
       "name": "4. Coordinator Agent",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [-1328, 208],
+      "position": [
+        -1328,
+        208
+      ],
       "credentials": {
         "openAiApi": {
           "id": "zJf7toDiDt6wUlXE",
@@ -251,7 +286,10 @@
       "name": "Parse Coordinator",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-1104, 208]
+      "position": [
+        -1104,
+        208
+      ]
     },
     {
       "parameters": {
@@ -259,7 +297,8 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict"
+            "typeValidation": "strict",
+            "version": 1
           },
           "conditions": [
             {
@@ -280,7 +319,10 @@
       "name": "5. Recognized?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [-880, 208]
+      "position": [
+        -880,
+        208
+      ]
     },
     {
       "parameters": {
@@ -299,7 +341,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({\n  model: 'meta-llama/Llama-3.3-70B-Instruct',\n  temperature: 0.1,\n  max_tokens: 2048,\n  messages: [\n    {\n      role: 'system',\n      content: 'You are a Resolution Agent for CandleKeep, a furniture retailer.\\n\\nIMPORTANT RULES:\\n1. ONLY use dates and facts from the Order History provided. NEVER make up dates or carrier names.\\n2. If order history is provided, quote the exact dates and details from it.\\n3. If no order history, say \"I don\\'t have your order details on file\" and ask for more info.\\n4. Be empathetic and reference the customer\\'s sentiment.\\n\\nConfidence scoring:\\n- high (0.8+): Order history available and question can be fully answered\\n- medium (0.5-0.79): Partial info available\\n- low (<0.5): No order history or cannot answer\\n\\nRespond in JSON only:\\n{\\n  \"response\": \"customer response with EXACT dates from history\",\\n  \"action_items\": [\"action1\"],\\n  \"confidence_level\": \"high|medium|low\",\\n  \"confidence_score\": 0.0-1.0,\\n  \"escalation_needed\": false,\\n  \"escalation_reason\": null\\n}'\n    },\n    {\n      role: 'user',\n      content: 'Ticket: ' + $json.ticket_id + '\\nOrder: ' + ($json.order_id || 'N/A') + '\\nCategory: ' + $json.category + '\\nSentiment: ' + $json.sentiment + '\\n\\nCustomer Message: ' + $json.original_query + ($json.order_history ? '\\n\\nOrder History (USE THESE EXACT DATES):\\n' + $json.order_history : '\\n\\nNo order history available.')\n    }\n  ]\n}) }}",
+        "jsonBody": "={{ JSON.stringify({\n  model: 'Qwen/Qwen3-30B-A3B-Instruct-2507',\n  temperature: 0.1,\n  max_tokens: 2048,\n  messages: [\n    {\n      role: 'system',\n      content: 'You are a Resolution Agent for CandleKeep, a furniture retailer.\\n\\nIMPORTANT RULES:\\n1. ONLY use dates and facts from the Order History provided. NEVER make up dates or carrier names.\\n2. If order history is provided, quote the exact dates and details from it.\\n3. If no order history, say \"I don\\'t have your order details on file\" and ask for more info.\\n4. Be empathetic and reference the customer\\'s sentiment.\\n\\nConfidence scoring:\\n- high (0.8+): Order history available and question can be fully answered\\n- medium (0.5-0.79): Partial info available\\n- low (<0.5): No order history or cannot answer\\n\\nRespond in JSON only:\\n{\\n  \"response\": \"customer response with EXACT dates from history\",\\n  \"action_items\": [\"action1\"],\\n  \"confidence_level\": \"high|medium|low\",\\n  \"confidence_score\": 0.0-1.0,\\n  \"escalation_needed\": false,\\n  \"escalation_reason\": null\\n}'\n    },\n    {\n      role: 'user',\n      content: 'Ticket: ' + $json.ticket_id + '\\nOrder: ' + ($json.order_id || 'N/A') + '\\nCategory: ' + $json.category + '\\nSentiment: ' + $json.sentiment + '\\n\\nCustomer Message: ' + $json.original_query + ($json.order_history ? '\\n\\nOrder History (USE THESE EXACT DATES):\\n' + $json.order_history : '\\n\\nNo order history available.')\n    }\n  ]\n}) }}",
         "options": {
           "timeout": 60000
         }
@@ -308,7 +350,10 @@
       "name": "6. Resolution Agent",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [-656, 112],
+      "position": [
+        -656,
+        112
+      ],
       "credentials": {
         "openAiApi": {
           "id": "zJf7toDiDt6wUlXE",
@@ -324,7 +369,10 @@
       "name": "Manual (Unrecognized)",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-656, 304]
+      "position": [
+        -656,
+        304
+      ]
     },
     {
       "parameters": {
@@ -334,7 +382,10 @@
       "name": "Parse Resolution",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-448, 112]
+      "position": [
+        -448,
+        112
+      ]
     },
     {
       "parameters": {
@@ -342,7 +393,8 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict"
+            "typeValidation": "strict",
+            "version": 1
           },
           "conditions": [
             {
@@ -363,7 +415,10 @@
       "name": "7. Confidence?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [-224, 112]
+      "position": [
+        -224,
+        112
+      ]
     },
     {
       "parameters": {
@@ -373,7 +428,10 @@
       "name": "8a. Auto Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [0, 0]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
@@ -383,7 +441,10 @@
       "name": "8b. Manual (Low Conf)",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [0, 208]
+      "position": [
+        0,
+        208
+      ]
     },
     {
       "parameters": {
@@ -393,7 +454,10 @@
       "name": "Respond Success",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [224, 0]
+      "position": [
+        224,
+        0
+      ]
     },
     {
       "parameters": {
@@ -403,7 +467,10 @@
       "name": "Respond Manual",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [224, 208]
+      "position": [
+        224,
+        208
+      ]
     },
     {
       "parameters": {
@@ -413,7 +480,10 @@
       "name": "Respond Unrecognized",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [-448, 304]
+      "position": [
+        -448,
+        304
+      ]
     },
     {
       "parameters": {
@@ -426,7 +496,10 @@
       "name": "Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [-2704, 128]
+      "position": [
+        -2704,
+        128
+      ]
     }
   ],
   "pinData": {},
@@ -664,7 +737,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "8421e812-420d-4992-8728-42de7b47235e",
+  "versionId": "64a30ef5-2ddb-4ae0-be82-6d31238b4041",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "9bf9bcfd0f29c8254c841be7cb0f393eebe6b56b8daa775d7fd5204fd3442eaa"
