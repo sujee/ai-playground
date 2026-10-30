@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "english": "Yes, I know.",
+    "sl_tamil": "ஓம், எனக்குத் தெரியும்.",
+    "tn_tamil": "ஆமா, எனக்குத் தெரியும்."
+  },
+  {
+    "id": 2,
+    "english": "I need to talk to you.",
+    "sl_tamil": "நான் உங்களோட கதைக்க வேணும்.",
+    "tn_tamil": "நான் உங்ககிட்ட பேசணும்."
+  },
+  {
+    "id": 3,
+    "english": "I can’t come today.",
+    "sl_tamil": "எனக்கு இண்டைக்கு வர ஏலாது.",
+    "tn_tamil": "என்னால இன்னைக்கு வர முடியாது."
+  },
+  {
+    "id": 4,
+    "english": "What are you doing?",
+    "sl_tamil": "என்ன செய்யிறீங்கள்?",
+    "tn_tamil": "என்ன பண்றீங்க?"
+  },
+  {
+    "id": 5,
+    "english": "Have you eaten?",
+    "sl_tamil": "சாப்பிட்டீங்களோ?",
+    "tn_tamil": "சாப்பிட்டீங்களா?"
+  },
+  {
+    "id": 6,
+    "english": "Where is that boy going?",
+    "sl_tamil": "அந்தப் பெடியன் எங்க போறான்?",
+    "tn_tamil": "அந்தப் பையன் எங்க போறான்?"
+  },
+  {
+    "id": 7,
+    "english": "It looks beautiful.",
+    "sl_tamil": "அது வடிவா இருக்கு.",
+    "tn_tamil": "அது அழகா இருக்கு."
+  },
+  {
+    "id": 8,
+    "english": "A little water, please.",
+    "sl_tamil": "கொஞ்சம் தண்ணி தாங்கோ.",
+    "tn_tamil": "கொஞ்சம் தண்ணி குடுங்க."
+  },
+  {
+    "id": 9,
+    "english": "Mother is in the kitchen.",
+    "sl_tamil": "அம்மா குசினியில இருக்கிறா.",
+    "tn_tamil": "அம்மா சமையலறையில இருக்காங்க."
+  },
+  {
+    "id": 10,
+    "english": "Shall we go to the shop?",
+    "sl_tamil": "கடைக்குப் போவோமா?",
+    "tn_tamil": "கடைக்குப் போலாமா?"
+  },
+  {
+    "id": 11,
+    "english": "Can you come today?",
+    "sl_tamil": "உங்களுக்கு இண்டைக்கு வர ஏலுமா?",
+    "tn_tamil": "உங்களால இன்னைக்கு வர முடியுமா?"
+  },
+  {
+    "id": 12,
+    "english": "I can’t do this.",
+    "sl_tamil": "எனக்கு இதைச் செய்ய ஏலாது.",
+    "tn_tamil": "என்னால இதைப் பண்ண முடியாது."
+  },
+  {
+    "id": 13,
+    "english": "Let’s talk about this tomorrow.",
+    "sl_tamil": "இதைப் பற்றி நாளைக்குக் கதைப்போம்.",
+    "tn_tamil": "இதைப் பத்தி நாளைக்குப் பேசலாம்."
+  },
+  {
+    "id": 14,
+    "english": "Who were you talking to?",
+    "sl_tamil": "நீங்கள் ஆரோட கதைச்சீங்கள்?",
+    "tn_tamil": "நீங்க யார்கிட்ட பேசுனீங்க?"
+  },
+  {
+    "id": 15,
+    "english": "That girl sings well.",
+    "sl_tamil": "அந்தப் பெட்டை நல்லாப் பாடுறாள்.",
+    "tn_tamil": "அந்தப் பொண்ணு நல்லாப் பாடுறா."
+  },
+  {
+    "id": 16,
+    "english": "This flower is beautiful.",
+    "sl_tamil": "இந்தப் பூ வடிவா இருக்கு.",
+    "tn_tamil": "இந்தப் பூ அழகா இருக்கு."
+  },
+  {
+    "id": 17,
+    "english": "Please come here.",
+    "sl_tamil": "இங்க வாங்கோ.",
+    "tn_tamil": "இங்க வாங்க."
+  },
+  {
+    "id": 18,
+    "english": "Please sit down.",
+    "sl_tamil": "இருங்கோ.",
+    "tn_tamil": "உக்காருங்க."
+  },
+  {
+    "id": 19,
+    "english": "Please give me that book.",
+    "sl_tamil": "அந்தப் புத்தகத்தை எனக்குத் தாங்கோ.",
+    "tn_tamil": "அந்தப் புத்தகத்தை எனக்குக் குடுங்க."
+  },
+  {
+    "id": 20,
+    "english": "Yes, that boy is my younger brother.",
+    "sl_tamil": "ஓம், அந்தப் பெடியன் என்ர தம்பி.",
+    "tn_tamil": "ஆமா, அந்தப் பையன் என்னோட தம்பி."
+  }
+]
