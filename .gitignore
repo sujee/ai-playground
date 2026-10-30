@@ -9,6 +9,7 @@
 
 ## Python
 .env
+.venv/
 __pycache__
 .ipynb_checkpoints
 llama-index-cache/

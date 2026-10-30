@@ -1,0 +1,6 @@
+## local python env - would break the linux image if copied in
+.venv
+__pycache__
+
+## OS
+.DS_Store

@@ -4,47 +4,59 @@ We will build, package and deploy a sample LLM app
 
 We will use [streamlit](https://streamlit.io/) framework to build nice, easy UIs
 
-## 1 - Inspect the Code
+## 1 - Setup
+
+This is a self-contained [uv](https://docs.astral.sh/uv/) project.  Sync the environment
+
+```bash
+uv  sync
+```
+
+Copy `.env.sample` into `.env` and populate your API keys
+
+```bash
+cp   .env.sample   .env
+```
+
+## 2 - Inspect the Code
 
 Using Replicate [chat_app1_replicate.py](chat_app1_replicate.py)
 
 Using OpenAI [chat_app1_openai.py](chat_app1_openai.py)
 
-## 2 - Launch app
+## 3 - Launch app
 
-### 2.1 - Replicate
+### 3.1 - Replicate
 
 ```bash
-streamlit  run chat_app1_replicate.py
+uv  run  streamlit  run chat_app1_replicate.py
 ```
 
-### 2.2 - OpenAI
+### 3.2 - OpenAI
 
 ```bash
-streamlit  run chat_app1_openai.py
+uv  run  streamlit  run chat_app1_openai.py
 ```
 
 This will open a browser.  Or go to the default url: http://localhost:8501
 
 
-## 3 - Containerize the app
+## 4 - Containerize the app
 
 For this step, you will need to have [Docker](https://www.docker.com/) installed and setup on your machine.
 
-### 3.1 - Env file
+### 4.1 - Env file
 
-Copy the `.env` file from project directory to this directory.  You may use a file manager / editor to do this.
+The app reads API keys from a `.env` file in this directory (created during setup — see Step-1).
 
-Here is how to do it in terminal 
+If you have not created it yet
 
 ```bash
-cd  llm-workshop
-
-cp   .env    llm-apps/.env
+cp   .env.sample   .env
 ```
 
 
-### 3.2 - Build Docker
+### 4.2 - Build Docker
 
 ```bash
 docker build .  -t llm-app
@@ -63,7 +75,7 @@ REPOSITORY              TAG             IMAGE ID       CREATED         SIZE
 llm-app                       latest               6c85f9a56c2f   16 seconds ago   1.54GB
 ```
 
-## 4 -  Running the Docker
+## 5 -  Running the Docker
 
 
 ```bash

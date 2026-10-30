@@ -18,7 +18,7 @@ Login to your account
 
 ## Step-3: Load Sample Data
 
-![Alt text](media/atlas-setup-load-data-1.png)
+![Alt text](../media/atlas-setup-load-data-1.png)
 
 This may take a few minutes
 
@@ -28,9 +28,9 @@ We will use **mflix** data.  This data has movie information.
 
 Use Atlas UI to browse data.
 
-![Alt text](media/mflix-1b.png)
+![Alt text](../media/mflix-1b.png)
 
-![Alt text](media/mflix-embeddings-1.png)
+![Alt text](../media/mflix-embeddings-1.png)
 
 
 ## Step-5: Allow Network Access
@@ -46,7 +46,7 @@ Follow these steps:
 
 **Note: Doing this opens up Atlas from connections anywhere.  It is not recommended for production setups!**
 
-![](media/atlas-connect-2.png)
+![](../media/atlas-connect-2.png)
 
 
 ## Congrats!  Now Atlas is setup  👏

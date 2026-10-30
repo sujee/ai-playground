@@ -2,6 +2,12 @@
 
 In this section we will introduce **vector databases**
 
+## Setup
+
+```bash
+uv  sync
+```
+
 ## About Vector Databases
 
 **Tired of Search Engines Missing the Point? Vector Databases to the Rescue!**

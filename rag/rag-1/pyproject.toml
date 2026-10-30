@@ -1,0 +1,22 @@
+[project]
+name = "rag-1"
+version = "0.1.0"
+description = "Workshop module: RAG 1 - query PDFs"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "llama-index",
+    "llama-index-embeddings-huggingface",
+    "llama-index-llms-replicate",
+    "llama-index-readers-file",
+    "llama-index-vector-stores-milvus",
+    "pypdf",
+    "pymilvus",
+    "python-dotenv",
+]
+
+[dependency-groups]
+dev = [
+    "jupyterlab",
+    "ipykernel",
+]

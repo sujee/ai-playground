@@ -9,17 +9,17 @@ MY_CONFIG = MyConfig ()
 
 ### -------- configure input / output ---------------
 
-MY_CONFIG.INPUT_DATA_DIR = "../data/papers"
+MY_CONFIG.INPUT_DATA_DIR = "../../data/papers"
 MY_CONFIG.COLLECTION_NAME = 'papers'
 
-# MY_CONFIG.INPUT_DATA_DIR = "../data/fomc"
+# MY_CONFIG.INPUT_DATA_DIR = "../../data/fomc"
 # MY_CONFIG.COLLECTION_NAME = 'fomc'
 
-# MY_CONFIG.INPUT_DATA_DIR = "../data/10k"
+# MY_CONFIG.INPUT_DATA_DIR = "../../data/10k"
 # MY_CONFIG.COLLECTION_NAME = '10k'
 
 
-# MY_CONFIG.INPUT_DATA_DIR = "../data/walmart-reports-1"
+# MY_CONFIG.INPUT_DATA_DIR = "../../data/walmart-reports-1"
 # MY_CONFIG.COLLECTION_NAME = 'walmart'
 
 ### -------------------------------

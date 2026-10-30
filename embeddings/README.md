@@ -1,5 +1,17 @@
 # Embeddings
 
+## Setup
+
+```bash
+uv  sync
+```
+
+Copy `.env.sample` to `.env` and fill in your API keys
+
+```bash
+cp  .env.sample  .env
+```
+
 ## Embeddings Explained
 
 ![](../media/embeddings-2.png)

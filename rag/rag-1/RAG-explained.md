@@ -5,7 +5,7 @@ RAG conists of two phases
 - **1 - Import phase**:  Preparing and indexing the data  (the top row in the diagram)
 - **2 - Querying phase**: query the data prepared in phase 1  (bottom row in the  diagram)
 
-![](../media/rag-overview-2.png)
+![](../../media/rag-overview-2.png)
 
 
 ### Step 1 (Ingest): Cleanup documents

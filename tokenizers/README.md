@@ -1,5 +1,11 @@
 # Tokenizers
 
+## Setup
+
+```bash
+uv  sync
+```
+
 ## Intro
 
 Imagine you want to teach a computer to understand English. You can't just feed it raw text; it needs to be broken down into smaller, manageable chunks. This is where **tokenizers** come in. They are the essential preprocessing tools that transform raw text into numerical representations that LLMs (Large Language Models) can understand and process.

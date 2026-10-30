@@ -1,0 +1,15 @@
+[project]
+name = "tokenizers"
+version = "0.1.0"
+description = "Workshop module: tokenizers"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "transformers",
+]
+
+[dependency-groups]
+dev = [
+    "jupyterlab",
+    "ipykernel",
+]

@@ -1,72 +1,75 @@
 # Setup a Local Python Dev Environment
 
-## Step-1: Anaconda Python environment
+We will use [uv](https://docs.astral.sh/uv/) to manage Python environments. It is fast, and each module in this repo is its own self-contained uv project.
 
-You can install Anaconda by following the [guide here](https://www.anaconda.com/download/).
+## Step-1: Install uv
 
-## Step-2: Create a custom environment
+Install uv by following the [guide here](https://docs.astral.sh/uv/getting-started/installation/).
 
-We will create an environment for this workshop with all the required libraries installed.
-
+Verify the install
 
 ```bash
-conda create -n llm-workshop-1 -y python=3.11
+uv --version
 ```
 
-Activate the new conda environment
+## Step-2: Get the repo
 
 ```bash
-conda activate llm-workshop-1
-```
-
-Make sure env is swithced to `llm-workshop-1`.
-
-**Make sure python version is 3.11**
-
-```bash
-python --version
-```
-
-**Note**: If you are on a linux system install these too
-
-```bash
-conda install gcc_linux-64
-
-conda install gxx_linux-64
-```
-
-Get the repo
-
-```bash
-git   clone  https://github.com/sujee/llm-workshop
+git  clone  https://github.com/sujee/ai-playground
 ```
 
 ```bash
-cd  llm-workshop
+cd  ai-playground
 ```
 
-install all needed packages
+## Step-3: Setup a project
+
+Every module directory (`tokenizers`, `embeddings`, `vector-db`, `llm-intro`, `chat-app-1`, `rag/rag-1`, `rag/rag-2`) is its own uv project.
+
+`cd` into the project directory and sync its environment
 
 ```bash
-pip install -r requirements.txt
+cd  tokenizers
+
+uv  sync
 ```
 
-Install a custom kernel 
+This creates a local `.venv` with all the required libraries.  Do this once per project.
+
+**Note**: Jupyter (`jupyterlab`, `ipykernel`) is a dev tool — it lives in the `dev` dependency group in `pyproject.toml`, and `uv sync` installs it by default.  To sync only the runtime libraries
 
 ```bash
-python -m ipykernel install --user --name=llm-workshop --display-name llm-workshop
+uv  sync  --no-dev
 ```
 
+## Step-4: Setup API keys (.env)
 
-## Start-3: Start Jupyter
+Each project that needs API keys has a `.env.sample` file.  Copy it into `.env` in the project directory and populate your keys.
 
 ```bash
-jupyter lab
+cp  .env.sample  .env
+```
+
+## Step-5: Start Jupyter
+
+From the project directory
+
+```bash
+uv  run  jupyter  lab
+```
+
+Jupyter is installed from the project's `dev` dependency group (see Step-3).  It will automatically use the project's environment.
+
+## Running the chat app
+
+The `chat-app-1` project has no notebooks.  Run it with
+
+```bash
+uv  run  streamlit  run  chat_app1_openai.py
 ```
 
 ## Troubleshooting
 
-### If libraries are not loading in Jupyter:  Select custom Kernel
+### If libraries are not loading in Jupyter
 
-
-When running Jupyter notebooks, if data prep kit libraries are not found, try selecting the custom kernel you created (`llm-workshop`)
+Make sure you started Jupyter with `uv run jupyter lab` from the project directory — that guarantees the notebook kernel uses the project's environment.

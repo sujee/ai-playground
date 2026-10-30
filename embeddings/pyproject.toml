@@ -1,0 +1,20 @@
+[project]
+name = "embeddings"
+version = "0.1.0"
+description = "Workshop module: embeddings"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "datasets",
+    "openai",
+    "pandas",
+    "python-dotenv",
+    "sentence-transformers",
+    "torch",
+]
+
+[dependency-groups]
+dev = [
+    "jupyterlab",
+    "ipykernel",
+]

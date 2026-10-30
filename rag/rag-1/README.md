@@ -2,13 +2,25 @@
 
 In this lab, we will process PDF documents and ask questions about them using an LLM.
 
-We have a variety of [datasets](../data/) we can use.
+We have a variety of [datasets](../../data/) we can use.
+
+## Setup
+
+```bash
+uv  sync
+```
+
+Copy `.env.sample` to `.env` and fill in your API keys
+
+```bash
+cp  .env.sample  .env
+```
 
 ## Step-1: RAG Workflow Explained
 
 Here is the overall work flow.  For details see [RAG-explained](./RAG-explained.md)
 
-![](../media/rag-overview-2.png)
+![](../../media/rag-overview-2.png)
 
 ## Step-2: Process Files
 
@@ -39,4 +51,4 @@ Share your findings with the group
 
 ## Step-5: (Bonus Lab) - Create a UI to chat with documents
 
-You can use the example from [../llm-apps/](../llm-apps/) to create a UI chatbot for RAG
+You can use the example from [../../chat-app-1/](../../chat-app-1/) to create a UI chatbot for RAG

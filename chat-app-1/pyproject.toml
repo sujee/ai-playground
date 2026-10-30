@@ -1,0 +1,13 @@
+[project]
+name = "chat-app-1"
+version = "0.1.0"
+description = "Workshop module: Streamlit chat app"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ollama",
+    "openai",
+    "python-dotenv",
+    "replicate",
+    "streamlit",
+]

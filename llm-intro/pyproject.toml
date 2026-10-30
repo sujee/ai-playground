@@ -1,0 +1,18 @@
+[project]
+name = "llm-intro"
+version = "0.1.0"
+description = "Workshop module: working with LLMs"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ollama",
+    "openai",
+    "python-dotenv",
+    "replicate",
+]
+
+[dependency-groups]
+dev = [
+    "jupyterlab",
+    "ipykernel",
+]

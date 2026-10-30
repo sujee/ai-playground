@@ -6,6 +6,18 @@ In this lab, we will
 - index the files
 - and query them
 
+## Setup
+
+```bash
+uv  sync
+```
+
+Copy `.env.sample` to `.env` and fill in your API keys
+
+```bash
+cp  .env.sample  .env
+```
+
 ## Step-1: Query a Web site
 
 This example shows 

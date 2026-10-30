@@ -1,0 +1,18 @@
+[project]
+name = "vector-db"
+version = "0.1.0"
+description = "Workshop module: vector databases"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "datasets",
+    "pandas",
+    "pymilvus[model]",
+    "torch",
+]
+
+[dependency-groups]
+dev = [
+    "jupyterlab",
+    "ipykernel",
+]

@@ -1,5 +1,17 @@
 # Large Language Models (LLMs)
 
+## Setup
+
+```bash
+uv  sync
+```
+
+Copy `.env.sample` to `.env` and fill in your API keys
+
+```bash
+cp  .env.sample  .env
+```
+
 ## LLM Intro
 
 [LLM Intro](LLM-intro.md)

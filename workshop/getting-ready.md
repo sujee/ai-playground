@@ -19,7 +19,7 @@ Download one the following:
 
 ## Step-2: (Necessary) Setup a Local Python Development Env
 
-Follow [setup-python-dev-env.md](setup-python-dev-env.md) to setup your local python dev environment.
+Follow [setup-python-dev-env.md](../setup-python-dev-env.md) to setup your local python dev environment.
 
 ## Step-3: (Necessary) Sign up for Replicate
 
@@ -35,7 +35,13 @@ The free account will give you a few API calls for free.  That is enough for thi
 
 ## Step-4: (Necessary) Create an .env file
 
-Copy [env.txt](env.txt) into `.env` in project root directory
+Each project has an `.env.sample` file.  Copy it into `.env` in the project directory
+
+```bash
+cd  <project-dir>
+
+cp   .env.sample   .env
+```
 
 Populate your API keys in `.env` file
 
@@ -49,6 +55,6 @@ Sign up for [open ai api](https://openai.com/api/) - if you like to use OpenAI p
 
 ## Step-7: (Optional) Sign up for MongoDB Atlas
 
-If you like to use MongoDB Atlas, [sign up and setup MongoDB Atlas](./setup-atlas.md)
+If you like to use MongoDB Atlas, [sign up and setup MongoDB Atlas](../vector-db/setup-atlas.md)
 
 

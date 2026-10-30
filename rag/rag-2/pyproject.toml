@@ -1,0 +1,23 @@
+[project]
+name = "rag-2"
+version = "0.1.0"
+description = "Workshop module: RAG 2 - query a website"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "humanfriendly",
+    "llama-index",
+    "llama-index-embeddings-huggingface",
+    "llama-index-llms-replicate",
+    "llama-index-readers-web",
+    "llama-index-vector-stores-milvus",
+    "pymilvus",
+    "python-dotenv",
+    "requests",
+]
+
+[dependency-groups]
+dev = [
+    "jupyterlab",
+    "ipykernel",
+]
